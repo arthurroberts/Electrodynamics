@@ -1,1 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://ecs.wgtn.ac.nz/foswiki/pub/Courses/EEEN203_2024T1/RCL_ser/r_style.css">
+</head>
+ <title> Vector and Scalar Fields. </title>  
+<script type="text/javascript" async="" src="https://ecs.wgtn.ac.nz/libs/mathjax/26/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+
+<body>
+<h1> Vector and Scalar Fields. </h1>
+
+<h2>  Scalar fields </h2>
+Scalar field is simply scalar function of 3 arguments.
+As an example there is a scalar field which drops as \( 1/r \) where \(r\) is distance from 
+point of origin. 
+\[ F(x,y,x) = 1 / \sqrt{x^2 + y^2 + z^2 }  \]
+<pre>
+#scalar.py
+x, y ,z = sp.symbols('x y z')
+r= sp.sqrt(x**2 + y**2 +z**2)
+F = 1/r
+</pre>
+<a href="Python/scalar.py" download>  <button>Download file scalar.py .</button></a>
+ 
+And here is the cut for \( z=10\)
+
+<figure style="border: 2px solid lightgray; padding: 10px; width: 30% ; margin: 20px auto;">>
+<img src="Img/scalar_1.svg" style="width: 100%; " alt="scalar_1.svg">
+<figcaption>  Scalar field cut at z=10.</figcaption>
+</figure>
+
+
+<h2>Vector fields.</h2>
+Vector field is an assignment of a vector to each point in space. Vector can be wind speed, gravitational
+field, electric or magnetic field.<br> 
+Below are several examples of vector fields.<br>
+
+<h3> "Linear" field </h3>
+Simple can be 
+Field only has \(x\) component which drops as power of 3 as we move away from \( x = 0\) plane.
+Python code: 
+<pre>
+#vect1.py
+x, y ,z = sp.symbols('x y z')
+E_x = 1/(x**3)
+E_y = 0
+E_z = 0
+</pre>
+Here is the Python file:<br>
+<a href="Python/vect1.py" download>  <button>Download file vect1.py .</button></a><br>
+and result is.<br>
+
+<!--
+<figure style="border: 2px solid lightgray; padding: 10px; width: 30% ; margin: 20px auto;">>
+<img src="linear_1.svg" style="width: 100%; " alt="linear_1.svg">
+<figcaption>  "Linear" field example.</figcaption>
+</figure>
+https://ecs.wgtn.ac.nz/foswiki/pub/Courses/EEEN401_2025T2/VecTScalFields/
+-->
+<figure style="border: 2px solid lightgray; padding: 10px; width: 30% ; margin: 20px auto;">>
+<img src="Img/linear_1.svg" style="width: 100%; " alt="linear_1.svg">
+<figcaption>  "Linear" field example.</figcaption>
+</figure>
+
+<h3> "Radial" field </h3>
+
+<p>
+Very common vector field is "radial" field. Field comes from the source.
+Its strength (amplitude of the vector) 
+is inversely proportional (power \(n\), usually \(n=2\) due to law
+of conservation of energy) to the distance from the source. 
+Direction of field vector is to/from the source.
+</p>  
+
+<figure style="border: 2px solid lightgray; padding: 10px; width: 30% ; margin: 20px auto;">>
+<img src="Img/radial_1.svg" style="width: 100%; " alt="radial_1.svg">
+<figcaption>  Radial field definition.</figcaption>
+</figure>
+<a href="Python/vect3.py" download>  <button>Download Python file vect3.py</button></a>
+<br><br>
+
+How to write a formula for such field?<br>
+<p>
+It is easy to calculate the distance:
+\[ | \vec{r} | =  | \vec{r}_o - \vec{r}_s | = \sqrt{ (x_o - x_s)^2 + (y_o - y_s)^2 + (z_o - z_s)^2   } 
+\]
+Direction is a bit more involved. Direction is specified by unity vector \( \vec{dr} \), i.e. \( | \vec{dr}|=1 \).
+This vector we can write as:
+
+\[ \vec{dr} = \frac{\vec{r}_o - \vec{r}_s}{ | \vec{r}_o - \vec{r}_s | } = 
+\begin{bmatrix}  \frac{x_o-x_s}{|r|} \\ \frac{y_o-y_s}{|r|} \\ \frac{z_o-z_s}{|r|} \end{bmatrix} \] 
+
+Finally, vector field is:
+
+\[ \vec{F} = \frac{ \vec{dr}} { r^n } = 
+\begin{bmatrix}  \frac{x_o-x_s}{|r| |r|^n } \\ \frac{y_o-y_s}{|r| r^n} \\ \frac{z_o-z_s}{|r| |r^n} \end{bmatrix} =
+\begin{bmatrix}  \frac{x_o-x_s}{|r|^{n+1} } \\ \frac{y_o-y_s}{ r^{n+1}} \\ \frac{z_o-z_s}{|r|^{n+1}} \end{bmatrix}
+\] 
+</p>
+
+In Python radial field can be specified as:
+<pre style="border: 2px solid lightgray;">
+# vect3.py
+x, y ,z, x0,y0,z0,Q = sp.symbols('x y z x0 y0 z0 Q')
+r= sp.sqrt((x-x0)**2 + (y-y0)**2 +(z-z0)**2)
+E_x = (x-x0)/(r**3)
+E_y = (y-y0)/(r**3)
+E_z = (z-z0)/(r**3)
+</pre>
+<a href="Python/vect3.py" download>  <button>Download file vect3.py .</button></a>
+
+<figure style="border: 2px solid lightgray; padding: 10px; width: 30% ; margin: 20px auto;">>
+<img src="Img/radial_1.svg" style="width: 100%; " alt="radial_1.svg">
+<figcaption>  Radial field example.</figcaption>
+</figure>
+
+
+Examples of "radial" fields are gravitational and electrostatic fields.
+
+
+<h3> "Rotational" field </h3>
+<p>
+Not all fields spread out from the source (or converge to it). Some can look
+like going around in circles. 
+</p>
+
+<pre>
+#rotational_fild.py
+x, y ,z = sp.symbols('x y z', real = True, nonzero=True)
+# define the vector field
+r= sp.sqrt(x**2 + y**2 )
+F =[ -y/(r**2) , x/(r**2) ,0 ]
+print('F = ', sp.latex (F))
+</pre>
+<a href="Python/rotational_fild.py" download>  <button>Download file rotational_fild.py .</button></a>
+
+<!--
+<figure style="border: 2px solid lightgray; padding: 10px; width: 50% ; margin: 20px auto;">
+<img src="Img/rotat_1.svg" style="width: 100%; " alt="rotat_1.svg">
+<figcaption>  Rotational field example - .</figcaption>
+</figure>
+-->
+
+<figure style="border: 2px solid lightgray; padding: 10px; width: 30% ; margin: 20px auto;">>
+<img src="Img/rotat_1.svg" style="width: 100%; " alt="rotat_1.svg">
+<figcaption>  Rotational field example.</figcaption>
+</figure>
+  
+Example of such field is magnetic field.  
+</body>
+</html>
 
